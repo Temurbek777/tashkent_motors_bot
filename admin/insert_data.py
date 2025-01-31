@@ -305,7 +305,7 @@ avto_parkovka.place(x=1310, y=410)
 
 
 #----------------------- Add images -------------------------------
-IMAGES_DIRECTORY = r"C:\Users\-8-\PycharmProjects\tashkent_motors_bot\Images"
+IMAGES_DIRECTORY = "/home/temurbek/PycharmProjects/tashkent_motors_bot/Images"
 
 def upload_images():
     file_paths = filedialog.askopenfilenames(

@@ -1,4 +1,4 @@
-from admin.insert_data import SessionLocal, Car, CarPhoto
+from db_handler.create_db import SessionLocal, Car, CarPhoto
 
 db = SessionLocal()
 

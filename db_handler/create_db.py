@@ -1,9 +1,11 @@
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey,Float,Boolean
 from sqlalchemy.orm import declarative_base,relationship,sessionmaker
 import shutil
+import os
 
-
-engine = create_engine("sqlite:///Tashkent Motors DB.db")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Get the directory of create_db.py
+DATABASE_URL = f"sqlite:///{os.path.join(BASE_DIR, 'Tashkent Motors DB.db')}"  # Absolute path
+engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
