@@ -410,6 +410,67 @@ def getData():
 
     # print(brand_data, model_data, year_data, position_data, price_data, condition_data, body_type_data, engine_type_data, engine_size_data, horsePower_data, torque_data, transmission_data, privod_data, rasxod_data, uzunligi_data, balandligi_data, eni_data, disk_diametr_data, clearance_data, cargo_capacity_data, seat_capacity_data, lift_capacity_data, probeg_data, garantiya_data, color_data, kond_data, cruise_control_data, luk_data, sensor_ekran_data, podogrev_sideniy_data, kamera_360_data, avto_parkovka_data, sep="\n")
 
+    if data['position_data'] == "":
+        data['position_data'] = 0
+    if data['price_data'] == "":
+        data['price_data'] = 0
+    if data['condition_data'] == "":
+        data['condition_data'] = 0
+    if data['body_type_data'] == "":
+        data['body_type_data'] = 0
+    if data['engine_type_data'] == "":
+        data['engine_type_data'] = 0
+    if data['engine_size_data'] == "":
+        data['engine_size_data'] = 0
+    if data['horsePower_data'] == "":
+        data['horsePower_data'] = 0
+    if data['torque_data'] == "":
+        data['torque_data'] = 0
+    if data['transmission_data'] == "":
+        data['transmission_data'] = 0
+    if data['privod_data'] == "":
+        data['privod_data'] = 0
+    if data['rasxod_data'] == "":
+        data['rasxod_data'] = 0
+    if data['uzunligi_data'] == "":
+        data['uzunligi_data'] = 0
+    if data['balandligi_data'] == "":
+        data['balandligi_data'] = 0
+    if data['eni_data'] == "":
+        data['eni_data'] = 0
+    if data['disk_diametr_data'] == "":
+        data['disk_diametr_data'] = 0
+    if data['clearance_data'] == "":
+        data['clearance_data'] = 0
+    if data['cargo_capacity_data'] == "":
+        data['cargo_capacity_data'] = 0
+    if data['seat_capacity_data'] == "":
+        data['seat_capacity_data'] = 0
+    if data['lift_capacity_data'] == "":
+        data['lift_capacity_data'] = 0
+    if data['battery_type'] == "":
+        data['battery_type'] = 0
+    if data['probeg_data'] == "":
+        data['probeg_data'] = 0
+    if data['garantiya_data'] == "":
+        data['garantiya_data'] = 0
+    if data['color_data'] == "":
+        data['color_data'] = 0
+    if data['kond_data'] == 0:
+        data['kond_data'] = 0
+    if data['cruise_control_data'] == 0:
+        data['cruise_control_data'] = 0
+    if data['luk_data'] == 0:
+        data['luk_data'] = 0
+    if data['sensor_ekran_data'] == 0:
+        data['sensor_ekran_data'] = 0
+    if data['podogrev_sideniy_data'] == 0:
+        data['podogrev_sideniy_data'] = 0
+    if data['kamera_360_data'] == 0:
+        data['kamera_360_data'] = 0
+    if data['avto_parkovka_data'] == 0:
+        data['avto_parkovka_data'] = 0
+
     db = SessionLocal()
     new_car = Car(brand=data['brand_data'], model=data['model_data'], year=int(data['year_data']), position=data['position_data'], price=float(data['price_data']), condition=data['condition_data'],
                   body_type=data['body_type_data'], engine_type=data['engine_type_data'], engine_size=float(data['engine_size_data']), horsepower=int(data['horsePower_data']), torque=int(data['torque_data']),
