@@ -1,11 +1,20 @@
 from db_handler.create_db import SessionLocal, Car, CarPhoto
 
-db = SessionLocal()
+def get_car_by_model_filtered(model_name: str):
+    """
+    Retrieve car details by model but exclude attributes that are 0 or NULL.
+    """
+    db = SessionLocal()
+    car = db.query(Car).filter(Car.model == model_name).first()
 
-cars = db.query(Car).all()
-print("All Cars:")
-for car in cars:
-    if car.price == "":
-        print(f"ID: {car.id}, Brand: {car.brand}, Model: {car.model}, Year: {car.year}, Price: {car.price}")
+    if not car:
+        print(f"No car found for model: {model_name}")
+        return None
 
-db.close()
+    # Convert car object to dictionary and remove zero/None values
+    car_data = {column.name: getattr(car, column.name) for column in Car.__table__.columns}
+    car_filtered = {k: v for k, v in car_data.items() if v not in (None, 0)}
+
+    return car_filtered
+
+print(get_car_by_model_filtered("yuan plus"))
