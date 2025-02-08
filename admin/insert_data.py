@@ -1,4 +1,4 @@
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 from PIL import Image
 from pydantic.v1.networks import host_regex
 
@@ -54,7 +54,7 @@ position_lbl = customtkinter.CTkLabel(app, text="Position", font=custom_font)
 position_lbl.place(x=1000, y=80)
 
 # position txt box
-position = customtkinter.CTkComboBox(app, values=['1chi pozitsiya', '2chi pozitsiya', '3chi pozitsiya'], width=200, height=30)
+position = customtkinter.CTkComboBox(app, values=['1chi pozitsiya', '2chi pozitsiya', '3chi pozitsiya', '4chi pozitsiya'], width=200, height=30)
 position.place(x=990, y=110)
 #----------------------------------------------------------------
 
@@ -279,28 +279,85 @@ color = customtkinter.CTkTextbox(app, width=200, height=30)
 color.place(x=390, y=830)
 #----------------------------------------------------------------
 
+#---------------------car Bistri Zaryad-------------------------------
+# Bistri Zaryad label
+bistr_zaryad_lbl = customtkinter.CTkLabel(app, text="Bistri Zaryad", font=custom_font)
+bistr_zaryad_lbl.place(x=700, y=800)
+
+# Bistri Zaryad txt box
+bistr_zaryad = customtkinter.CTkTextbox(app, width=200, height=30)
+bistr_zaryad.place(x=690, y=830)
+#----------------------------------------------------------------
+
+#---------------------car Home Zaryad-------------------------------
+# Home Zaryad label
+home_zaryad_lbl = customtkinter.CTkLabel(app, text="Home Zaryad", font=custom_font)
+home_zaryad_lbl.place(x=1000, y=800)
+
+# Home Zaryad txt box
+home_zaryad = customtkinter.CTkTextbox(app, width=200, height=30)
+home_zaryad.place(x=990, y=830)
+#----------------------------------------------------------------
+
+#---------------------car Battery Capacity-------------------------------
+# Battery Capacity label
+battery_capacity_lbl = customtkinter.CTkLabel(app, text="Battery Capacity", font=custom_font)
+battery_capacity_lbl.place(x=1260, y=80)
+
+# Battery Capacity txt box
+battery_capacity = customtkinter.CTkTextbox(app, width=200, height=30)
+battery_capacity.place(x=1250, y=110)
+#----------------------------------------------------------------
+
 #---------------------car Features-------------------------------
 kond = customtkinter.CTkCheckBox(app, text='Konditsioner', width=200, height=30)
-kond.place(x=1310, y=110)
+kond.place(x=1310, y=190)
 
 cruise_control = customtkinter.CTkCheckBox(app, text="Adaptive kruiz kontrol", width=200, height=30)
-cruise_control.place(x=1310, y=160)
+cruise_control.place(x=1310, y=240)
 
 luk = customtkinter.CTkCheckBox(app, text='Elektrik lyuk', width=200, height=30)
-luk.place(x=1310, y=210)
+luk.place(x=1310, y=290)
 
 sensor_ekran = customtkinter.CTkCheckBox(app, text='Sensor ekran', width=200, height=30)
-sensor_ekran.place(x=1310, y=260)
+sensor_ekran.place(x=1310, y=340)
 
 podogrev_sideniy = customtkinter.CTkCheckBox(app, text='Podogrev_sideniy', width=200, height=30)
-podogrev_sideniy.place(x=1310, y=310)
+podogrev_sideniy.place(x=1310, y=390)
 
 kamera_360 = customtkinter.CTkCheckBox(app, text='360 Kamera', width=200, height=30)
-kamera_360.place(x=1310, y=360)
+kamera_360.place(x=1310, y=440)
 
 avto_parkovka = customtkinter.CTkCheckBox(app, text='Avto parkovka', width=200, height=30)
-avto_parkovka.place(x=1310, y=410)
+avto_parkovka.place(x=1310, y=490)
 #----------------------------------------------------------------
+
+
+# ---------------Edited car id====================================================
+def getModels():
+    models = []
+    db = SessionLocal()
+    cars = db.query(Car).all()
+    for car in cars:
+        models.append(car.model)
+    return models
+#==================================================================================
+
+# ===================== Show info =================================================
+def show_notification(title, message):
+    root = customtkinter.CTk()
+    root.withdraw()  # Hide the main window
+    messagebox.showinfo(title, message)  # Display the notification
+    root.destroy()
+# =================================================================================
+
+edit_car_model_lbl = customtkinter.CTkLabel(app, text="Edit Model", font=custom_font)
+edit_car_model_lbl.place(x=600, y=5)
+
+# Engine_size txt box
+edit_car_model = customtkinter.CTkComboBox(app, values=getModels(), width=200, height=30)
+edit_car_model.place(x=590, y=30)
+# ================================================================================
 
 
 
@@ -332,16 +389,16 @@ def upload_images():
         status_label.configure(text=f"Images saved in: {save_directory}")
 
 img_lbl = customtkinter.CTkLabel(app, text="Add photos", font=custom_font)
-img_lbl.place(x=1310, y=450)
+img_lbl.place(x=1310, y=540)
 
 status_label = customtkinter.CTkLabel(app, text="No images uploaded")
-status_label.pack()
+status_label.place(x=1310, y=620)
 
 # frame = customtkinter.CTkScrollableFrame(master=app, width=500, height=300)
 # frame.pack(pady=20, padx=20)
 
 upload_button = customtkinter.CTkButton(master=app, text="Upload Images", command=upload_images)
-upload_button.place(x=1310, y=500)
+upload_button.place(x=1310, y=590)
 
 # # Color txt box
 # color = customtkinter.CTkTextbox(app, width=200, height=30)
@@ -373,11 +430,12 @@ def add_photos_from_directory(car_id, directory_path):
     db.close()
     print(f"Photos from '{directory_path}' have been added to the database.")
 
-def getData():
+def CreateCar():
     data['brand_data'] = brand.get("1.0", 'end').strip()
     data['model_data'] = model.get("1.0", 'end').strip()
     data['year_data'] = year.get("1.0", 'end').strip()
     data['position_data'] = position.get().strip()
+    data['battery_capacity'] = battery_capacity.get("1.0", 'end').strip()
     data['price_data'] = price.get("1.0", 'end').strip()
     data['condition_data'] = condition.get().strip()
     data['body_type_data'] = body_type.get().strip()
@@ -400,6 +458,8 @@ def getData():
     data['probeg_data'] = probeg.get("1.0", 'end').strip()
     data['garantiya_data'] = garantiya.get("1.0", 'end').strip()
     data['color_data'] = color.get("1.0", 'end').strip()
+    data['bistr_zaryad'] = bistr_zaryad.get("1.0", 'end').strip()
+    data['home_zaryad'] = home_zaryad.get("1.0", 'end').strip()
     data['kond_data'] = kond.get()
     data['cruise_control_data'] = cruise_control.get()
     data['luk_data'] = luk.get()
@@ -412,6 +472,8 @@ def getData():
 
     if data['position_data'] == "":
         data['position_data'] = 0
+    if data['battery_capacity'] == "":
+        data["battery_capacity"] = 0
     if data['price_data'] == "":
         data['price_data'] = 0
     if data['condition_data'] == "":
@@ -456,6 +518,10 @@ def getData():
         data['garantiya_data'] = 0
     if data['color_data'] == "":
         data['color_data'] = 0
+    if data['bistr_zaryad'] == "":
+        data['bistr_zaryad'] = 0
+    if data['home_zaryad'] == "":
+        data['home_zaryad'] = 0
     if data['kond_data'] == 0:
         data['kond_data'] = 0
     if data['cruise_control_data'] == 0:
@@ -471,12 +537,16 @@ def getData():
     if data['avto_parkovka_data'] == 0:
         data['avto_parkovka_data'] = 0
 
+    if data["brand_data"] == "" or data["model_data"] == "" or data["year_data"] == "":
+        show_notification("Error", f"Moshina brandi,modeli yoki yili kiritilmadi")
+        return
+
     db = SessionLocal()
-    new_car = Car(brand=data['brand_data'], model=data['model_data'], year=int(data['year_data']), position=data['position_data'], price=float(data['price_data']), condition=data['condition_data'],
-                  body_type=data['body_type_data'], engine_type=data['engine_type_data'], engine_size=float(data['engine_size_data']), horsepower=int(data['horsePower_data']), torque=int(data['torque_data']),
-                  transmission=data['transmission_data'], privod=data['privod_data'], fuel_spending=float(data['rasxod_data']), length=float(data['uzunligi_data']), height=float(data['balandligi_data']),
-                  width=float(data['eni_data']), disk_diameter=float(data['disk_diametr_data']), clearance=float(data['clearance_data']), cargo_capacity=float(data['cargo_capacity_data']), seat_capacity=int(data['seat_capacity_data']),
-                  lift_capacity=float(data['lift_capacity_data']), battery_type=data['battery_type'], mileage=float(data['probeg_data']), guarantee=data['garantiya_data'], color=data['color_data'], is_ac_available=data['kond_data'], is_cruise_control_available=data['cruise_control_data'],
+    new_car = Car(brand=data['brand_data'], model=data['model_data'], year=data['year_data'], position=data['position_data'],battery_capacity=data["battery_capacity"], price=data['price_data'], condition=data['condition_data'],
+                  body_type=data['body_type_data'], engine_type=data['engine_type_data'], engine_size=data['engine_size_data'], horsepower=data['horsePower_data'], torque=data['torque_data'],
+                  transmission=data['transmission_data'], privod=data['privod_data'], fuel_spending=data['rasxod_data'], length=data['uzunligi_data'], height=data['balandligi_data'],
+                  width=data['eni_data'], disk_diameter=data['disk_diametr_data'], clearance=data['clearance_data'], cargo_capacity=data['cargo_capacity_data'], seat_capacity=data['seat_capacity_data'],
+                  lift_capacity=data['lift_capacity_data'], battery_type=data['battery_type'], mileage=data['probeg_data'], guarantee=data['garantiya_data'], color=data['color_data'], bistr_zaryad=data["bistr_zaryad"], home_zaryad=data["home_zaryad"], is_ac_available=data['kond_data'], is_cruise_control_available=data['cruise_control_data'],
                   is_luk_available=data['luk_data'], is_display_available=data['sensor_ekran_data'], is_seat_heat_available=data['podogrev_sideniy_data'], is_360_kamera_available=data['kamera_360_data'], is_auto_parking_available=data['avto_parkovka_data'])
 
     db.add(new_car)
@@ -485,9 +555,320 @@ def getData():
 
     add_photos_from_directory(new_car.id, save_directory)
 
+    edit_car_model.set("")
+    edit_car_model.configure(values=getModels())
 
-button = customtkinter.CTkButton(app, text="Click Me", command=getData)
-button.pack(pady=20)
+
+
+def getData():
+    edit_model = edit_car_model.get()
+    db = SessionLocal()
+    car = db.query(Car).filter(Car.model == edit_model).first()
+
+    if not car:
+        print(f"Car with model {edit_model} not found.")
+        show_notification("Error", f"Car with this {edit_model} not found")
+        db.close()
+        return
+
+    brand.delete("1.0", "end")
+    brand.insert("end", car.brand)
+
+    model.delete("1.0", "end")
+    model.insert("end", car.model)
+
+    year.delete("1.0", "end")
+    year.insert("end", car.year)
+
+    position.set("")
+    position.set(car.position)
+
+    battery_capacity.delete("1.0", "end")
+    battery_capacity.insert("end", car.battery_capacity)
+
+    price.delete("1.0", "end")
+    price.insert("end", car.price)
+
+    condition.set("")
+    condition.set(car.condition)
+
+    body_type.set("")
+    body_type.set(car.body_type)
+
+    engine_type.set("")
+    engine_type.set(car.engine_type)
+
+    engine_size.delete("1.0", "end")
+    engine_size.insert("end", car.engine_size)
+
+    horsePower.delete("1.0", "end")
+    horsePower.insert("end", car.horsepower)
+
+    torque.delete("1.0", "end")
+    torque.insert("end", car.torque)
+
+    transmission.set("")
+    transmission.set(car.transmission)
+
+    privod.set("")
+    privod.set(car.torque)
+
+    rasxod.delete("1.0", "end")
+    rasxod.insert("end", car.fuel_spending)
+
+    uzunligi.delete("1.0", "end")
+    uzunligi.insert("end", car.length)
+
+    balandligi.delete("1.0", "end")
+    balandligi.insert("end", car.height)
+
+    eni.delete("1.0", "end")
+    eni.insert("end", car.width)
+
+    disk_diametr.delete("1.0", "end")
+    disk_diametr.insert("end", car.disk_diameter)
+
+    clearance.delete("1.0", "end")
+    clearance.insert("end", car.clearance)
+
+    cargo_capacity.delete("1.0", "end")
+    cargo_capacity.insert("end", car.cargo_capacity)
+
+    seat_capacity.delete("1.0", "end")
+    seat_capacity.insert("end", car.seat_capacity)
+
+    lift_capacity.delete("1.0", "end")
+    lift_capacity.insert("end", car.lift_capacity)
+
+    battery_type.delete("1.0", "end")
+    battery_type.insert("end", car.battery_type)
+
+    probeg.delete("1.0", "end")
+    probeg.insert("end", car.mileage)
+
+    probeg.delete("1.0", "end")
+    probeg.insert("end", car.mileage)
+
+    garantiya.delete("1.0", "end")
+    garantiya.insert("end", car.guarantee)
+
+    color.delete("1.0", "end")
+    color.insert("end", car.color)
+
+    bistr_zaryad.delete("1.0", "end")
+    bistr_zaryad.insert("end", car.bistr_zaryad)
+
+    home_zaryad.delete("1.0", "end")
+    home_zaryad.insert("end", car.home_zaryad)
+
+    kond.deselect()
+    cruise_control.deselect()
+    luk.deselect()
+    sensor_ekran.deselect()
+    podogrev_sideniy.deselect()
+    kamera_360.deselect()
+    avto_parkovka.deselect()
+
+
+def EditCarData():
+    data['brand_data'] = brand.get("1.0", 'end').strip()
+    data['model_data'] = model.get("1.0", 'end').strip()
+    data['year_data'] = year.get("1.0", 'end').strip()
+    data['position_data'] = position.get().strip()
+    data['battery_capacity'] = battery_capacity.get("1.0", 'end').strip()
+    data['price_data'] = price.get("1.0", 'end').strip()
+    data['condition_data'] = condition.get().strip()
+    data['body_type_data'] = body_type.get().strip()
+    data['engine_type_data'] = engine_type.get().strip()
+    data['engine_size_data'] = engine_size.get("1.0", 'end').strip()
+    data['horsePower_data'] = horsePower.get("1.0", 'end').strip()
+    data['torque_data'] = torque.get("1.0", 'end').strip()
+    data['transmission_data'] = transmission.get().strip()
+    data['privod_data'] = privod.get().strip()
+    data['rasxod_data'] = rasxod.get("1.0", 'end').strip()
+    data['uzunligi_data'] = uzunligi.get("1.0", 'end').strip()
+    data['balandligi_data'] = balandligi.get("1.0", 'end').strip()
+    data['eni_data'] = eni.get("1.0", 'end').strip()
+    data['disk_diametr_data'] = disk_diametr.get("1.0", 'end').strip()
+    data['clearance_data'] = clearance.get("1.0", 'end').strip()
+    data['cargo_capacity_data'] = cargo_capacity.get("1.0", 'end').strip()
+    data['seat_capacity_data'] = seat_capacity.get("1.0", 'end').strip()
+    data['lift_capacity_data'] = lift_capacity.get("1.0", 'end').strip()
+    data['battery_type'] = battery_type.get("1.0", 'end').strip()
+    data['probeg_data'] = probeg.get("1.0", 'end').strip()
+    data['garantiya_data'] = garantiya.get("1.0", 'end').strip()
+    data['color_data'] = color.get("1.0", 'end').strip()
+    data['bistr_zaryad'] = bistr_zaryad.get("1.0", 'end').strip()
+    data['home_zaryad'] = home_zaryad.get("1.0", 'end').strip()
+    data['kond_data'] = kond.get()
+    data['cruise_control_data'] = cruise_control.get()
+    data['luk_data'] = luk.get()
+    data['sensor_ekran_data'] = sensor_ekran.get()
+    data['podogrev_sideniy_data'] = podogrev_sideniy.get()
+    data['kamera_360_data'] = kamera_360.get()
+    data['avto_parkovka_data'] = avto_parkovka.get()
+
+    # print(brand_data, model_data, year_data, position_data, price_data, condition_data, body_type_data, engine_type_data, engine_size_data, horsePower_data, torque_data, transmission_data, privod_data, rasxod_data, uzunligi_data, balandligi_data, eni_data, disk_diametr_data, clearance_data, cargo_capacity_data, seat_capacity_data, lift_capacity_data, probeg_data, garantiya_data, color_data, kond_data, cruise_control_data, luk_data, sensor_ekran_data, podogrev_sideniy_data, kamera_360_data, avto_parkovka_data, sep="\n")
+
+    if data['position_data'] == "":
+        data['position_data'] = 0
+    if data['battery_capacity'] == "":
+        data["battery_capacity"] = 0
+    if data['price_data'] == "":
+        data['price_data'] = 0
+    if data['condition_data'] == "":
+        data['condition_data'] = 0
+    if data['body_type_data'] == "":
+        data['body_type_data'] = 0
+    if data['engine_type_data'] == "":
+        data['engine_type_data'] = 0
+    if data['engine_size_data'] == "":
+        data['engine_size_data'] = 0
+    if data['horsePower_data'] == "":
+        data['horsePower_data'] = 0
+    if data['torque_data'] == "":
+        data['torque_data'] = 0
+    if data['transmission_data'] == "":
+        data['transmission_data'] = 0
+    if data['privod_data'] == "":
+        data['privod_data'] = 0
+    if data['rasxod_data'] == "":
+        data['rasxod_data'] = 0
+    if data['uzunligi_data'] == "":
+        data['uzunligi_data'] = 0
+    if data['balandligi_data'] == "":
+        data['balandligi_data'] = 0
+    if data['eni_data'] == "":
+        data['eni_data'] = 0
+    if data['disk_diametr_data'] == "":
+        data['disk_diametr_data'] = 0
+    if data['clearance_data'] == "":
+        data['clearance_data'] = 0
+    if data['cargo_capacity_data'] == "":
+        data['cargo_capacity_data'] = 0
+    if data['seat_capacity_data'] == "":
+        data['seat_capacity_data'] = 0
+    if data['lift_capacity_data'] == "":
+        data['lift_capacity_data'] = 0
+    if data['battery_type'] == "":
+        data['battery_type'] = 0
+    if data['probeg_data'] == "":
+        data['probeg_data'] = 0
+    if data['garantiya_data'] == "":
+        data['garantiya_data'] = 0
+    if data['color_data'] == "":
+        data['color_data'] = 0
+    if data['bistr_zaryad'] == "":
+        data['bistr_zaryad'] = 0
+    if data['home_zaryad'] == "":
+        data['home_zaryad'] = 0
+    if data['kond_data'] == 0:
+        data['kond_data'] = 0
+    if data['cruise_control_data'] == 0:
+        data['cruise_control_data'] = 0
+    if data['luk_data'] == 0:
+        data['luk_data'] = 0
+    if data['sensor_ekran_data'] == 0:
+        data['sensor_ekran_data'] = 0
+    if data['podogrev_sideniy_data'] == 0:
+        data['podogrev_sideniy_data'] = 0
+    if data['kamera_360_data'] == 0:
+        data['kamera_360_data'] = 0
+    if data['avto_parkovka_data'] == 0:
+        data['avto_parkovka_data'] = 0
+
+    edit_model = edit_car_model.get()
+    db = SessionLocal()
+    car = db.query(Car).filter(Car.model == edit_model).first()
+
+    if not car:
+        print(f"Car with model {edit_model} not found.")
+        show_notification("Error", f"Car with this {edit_model} not found")
+        db.close()
+        return
+
+    car.brand = data['brand_data']
+    car.model = data['model_data']
+    car.year = data['year_data']
+    car.position=data['position_data']
+    car.battery_capacity=data["battery_capacity"]
+    car.price=data['price_data']
+    car.condition=data['condition_data']
+    car.body_type=data['body_type_data']
+    car.engine_type=data['engine_type_data']
+    car.engine_size=data['engine_size_data']
+    car.horsepower=data['horsePower_data']
+    car.torque=data['torque_data']
+    car.transmission=data['transmission_data']
+    car.privod=data['privod_data']
+    car.fuel_spending=data['rasxod_data']
+    car.length=data['uzunligi_data']
+    car.width=data['eni_data']
+    car.disk_diameter=data['disk_diametr_data']
+    car.clearance=data['clearance_data']
+    car.cargo_capacity=data['cargo_capacity_data']
+    car.seat_capacity=data['seat_capacity_data']
+    car.lift_capacity=data['lift_capacity_data']
+    car.battery_type=data['battery_type']
+    car.mileage=data['probeg_data']
+    car.guarantee=data['garantiya_data']
+    car.color=data['color_data']
+    car.bistr_zaryad=data["bistr_zaryad"]
+    car.home_zaryad=data["home_zaryad"]
+    car.is_ac_available=data['kond_data']
+    car.is_cruise_control_available=data['cruise_control_data']
+    car.is_luk_available=data['luk_data']
+    car.is_display_available=data['sensor_ekran_data']
+    car.is_seat_heat_available=data['podogrev_sideniy_data']
+    car.is_360_kamera_available=data['kamera_360_data']
+    car.is_auto_parking_available=data['avto_parkovka_data']
+
+    db.commit()
+    db.refresh(car)
+    db.close()
+
+    add_photos_from_directory(car.id, save_directory)
+
+    edit_car_model.set("")
+    edit_car_model.configure(values=getModels())
+
+#============================Delete the Car====================================
+def DeleteCarData():
+    db = SessionLocal()
+    edit_model = edit_car_model.get()
+    car = db.query(Car).filter(Car.model == edit_model).first()
+
+    if not car:
+        print(f"Car with model {edit_model} not found.")
+        show_notification("Error", f"Car with this {edit_model} not found")
+        db.close()
+        return
+
+    db.query(CarPhoto).filter(CarPhoto.car_id == car.id).delete()
+
+    db.delete(car)
+    db.commit()
+    db.close()
+
+    edit_car_model.set("")
+    edit_car_model.configure(values=getModels())
+    print(f"Car with model {edit_model} has been deleted.")
+
+
+#----------------------------- Buttons--------------------------------
+add_button = customtkinter.CTkButton(app, text="Add Car", command=CreateCar)
+add_button.place(x=100, y=30)
+
+get_button = customtkinter.CTkButton(app, text="Get Car Data", command=getData)
+get_button.place(x=400, y=30)
+
+edit_button2 = customtkinter.CTkButton(app, text="Edit Car", command=EditCarData)
+edit_button2.place(x=830, y=30)
+
+delete_car = customtkinter.CTkButton(app, text="Delete Car", command=DeleteCarData)
+delete_car.place(x=1000, y=30)
+#============================================================================
+
 
 # Run the application
 app.mainloop()

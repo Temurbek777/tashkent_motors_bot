@@ -13,8 +13,8 @@ def get_car_by_model_filtered(model_name: str):
 
     # Convert car object to dictionary and remove zero/None values
     car_data = {column.name: getattr(car, column.name) for column in Car.__table__.columns}
-    car_filtered = {k: v for k, v in car_data.items() if v not in (None, 0)}
+    car_filtered = {k: v for k, v in car_data.items() if v not in (None, '0')}
 
     return car_filtered
 
-print(get_car_by_model_filtered("yuan plus"))
+print(get_car_by_model_filtered("Song Plus Chempion EV"))
