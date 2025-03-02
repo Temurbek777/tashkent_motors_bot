@@ -17,4 +17,4 @@ def get_car_by_model_filtered(model_name: str):
 
     return car_filtered
 
-print(get_car_by_model_filtered("Song Plus Chempion EV"))
+print(get_car_by_model_filtered("J7"))

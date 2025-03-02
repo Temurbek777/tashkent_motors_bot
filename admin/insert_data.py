@@ -362,7 +362,7 @@ edit_car_model.place(x=590, y=30)
 
 
 #----------------------- Add images -------------------------------
-IMAGES_DIRECTORY = r"C:\Users\-8-\PycharmProjects\tashkent_motors_bot\Images"
+IMAGES_DIRECTORY = r"C:\Users\user\PycharmProjects\tashkent_motors_bot\Images"
 
 def upload_images():
     file_paths = filedialog.askopenfilenames(
@@ -379,6 +379,8 @@ def upload_images():
         global save_directory
         save_directory= os.path.join(IMAGES_DIRECTORY, f"{brand.get("1.0", 'end').strip()}-{model.get("1.0", 'end').strip()}")
         os.makedirs(save_directory)  # Create the new subdirectory
+
+        print(save_directory)
 
         for file_path in file_paths:
             filename = os.path.basename(file_path)
