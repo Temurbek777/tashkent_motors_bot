@@ -21,6 +21,6 @@ def get_all_car_brands():
     # Optionally, convert sets to lists:
     brands_models = {brand: list(models) for brand, models in brands_models.items()}
 
-    print(brands_models)
+    return brands_models
 
-get_all_car_brands()
+

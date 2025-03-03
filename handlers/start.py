@@ -8,6 +8,7 @@ from aiogram.fsm.state import State, StatesGroup
 import datetime
 
 from create_bot import bot
+from utils import get_Cars
 
 start_router = Router()
 
@@ -51,11 +52,13 @@ cars_keyboard = ReplyKeyboardMarkup(
 )
 
 # Car brands and their models
-car_brands = {
-    "Toyota": ["Camry", "Corolla", "Land Cruiser"],
-    "BMW": ["X5", "M3", "i8"],
-    "Mercedes": ["E-Class", "C-Class", "GLS"]
-}
+# car_brands = {
+#     "Toyota": ["Camry", "Corolla", "Land Cruiser"],
+#     "BMW": ["X5", "M3", "i8"],
+#     "Mercedes": ["E-Class", "C-Class", "GLS"]
+# }
+
+car_brands = get_Cars.get_all_car_brands()
 
 # Inline buttons for car brands
 def get_car_brands_inline():
@@ -80,6 +83,7 @@ def get_car_models_inline(brand):
 def get_car_options_inline():
     return InlineKeyboardMarkup(
         inline_keyboard=[
+            [InlineKeyboardButton(text="🚗Mashina Xarakteristikasini ko'rish", callback_data="car specifications")],
             [InlineKeyboardButton(text="📩 Leave the request", callback_data="leave_request")],
             [InlineKeyboardButton(text="👨‍💼 Manager", callback_data="contact_manager")]
         ]
@@ -99,7 +103,7 @@ async def set_bot_menu():
 
 @start_router.message(Command("start"))
 async def cmd_start(message: Message):
-    text = "👋 Tashkent Motor Botga xush kelibsiz!\nItmos pastdagi so'rovlarni tanlang:"
+    text = "👋 Tashkent Motors Botga xush kelibsiz!\nIltmos pastdagi so'rovlarni tanlang:"
 
     await message.answer(text, reply_markup=main_keyboard)
 
@@ -185,6 +189,10 @@ async def contact_manager_handler(call: CallbackQuery):
     manager_info = "👨‍💼 Manager Contact:\n📞 +998909528282\n📩 Telegram: @temurbek_tashkent_motors"
     await call.message.answer(manager_info)
 
+# Car specifications
+@start_router.callback_query(F.data == "car specifications")
+async def car_specifications(call: CallbackQuery, state: FSMContext):
+    await call.message.answer()
 
 # ------------------ Avtosalon haqida ma'lumot -------------------------
 @start_router.message(Command("info"))
