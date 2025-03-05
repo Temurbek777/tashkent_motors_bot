@@ -192,7 +192,28 @@ async def contact_manager_handler(call: CallbackQuery):
 # Car specifications
 @start_router.callback_query(F.data == "car specifications")
 async def car_specifications(call: CallbackQuery, state: FSMContext):
-    await call.message.answer()
+    specifications = get_Car_Spicifications.get_car_by_model_filtered(model)
+    await call.message.answer(f"Brand🔰: {specifications["brand"]}\n"
+                              f"Model🚘: {specifications["model"]}\n"
+                              f"Yil📆: {specifications["year"]}\n"
+                              f"Narxi: {specifications["price"]}\n"
+                              f"Holati: {specifications["condition"]}\n"
+                              f"Kuzov turi: {specifications["body_type"]}\n"
+                              f"Yoqilg'i turi: {specifications["engine_type"]}\n"
+                              f"Dvigatel hajmi: {specifications["engine_size"]}\n"
+                              f"Ot kuchi: {specifications["horsepower"]}\n"
+                              f"Transmissiya: {specifications["transmission"]}\n"
+                              f"Yoqilg'i sarfi: {specifications["fuel_spending"]}\n"
+                              f"Uzunligi: {specifications["length"]}\n"
+                              f"Balandligi: {specifications["height"]}\n"
+                              f"Eni: {specifications["width"]}\n"
+                              f"Diska diametri: {specifications["disk_diameter"]}\n"
+                              f"Bagaj sig'imi: {specifications["cargo_capacity"]}\n"
+                              f"O'rindiqlar soni: {specifications["seat_capacity"]}\n"
+                              # f"Probeg: {specifications["probeg"]}"
+                              f"Garantiya: {specifications["guarantee"]}\n"
+                              f"Rangi: {specifications["color"]}\n")
+
 
 # ------------------ Avtosalon haqida ma'lumot -------------------------
 @start_router.message(Command("info"))
