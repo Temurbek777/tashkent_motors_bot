@@ -21,3 +21,11 @@ def get_car_by_model_filtered(model_name: str):
 
 # print(specifications)
 # print(specifications['id'])
+
+def get_car_photo_by_model_filtered(model_name: str):
+    db = SessionLocal()
+    car_photo = db.query(CarPhoto).filter(Car.model == model_name).first()
+
+    if not car_photo:
+        print(f"No car photo found for model: {model_name}")
+        return None
