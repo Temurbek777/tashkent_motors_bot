@@ -8,7 +8,7 @@ from keyboards.Keys import main_keyboard
 manager_router = Router()
 
 #-----------------------Sotuv menejeri bilan bog'lanish ----------------------------
-@manager_router.message(lambda message: message.text == "👨‍💼Menejer")
+@manager_router.message(lambda message: message.text == "👨‍💼Menejer bilan bog'lanish")
 async def help_handler(message: types.Message):
     print(f"Received message: {message.text}")  # Debug log
     text = (

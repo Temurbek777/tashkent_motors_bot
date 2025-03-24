@@ -1,6 +1,6 @@
 from aiogram import Router, F, types
 from aiogram.types import (Message, ReplyKeyboardMarkup, KeyboardButton,
-                                 CallbackQuery)
+                                 CallbackQuery, FSInputFile)
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 import datetime
@@ -8,22 +8,16 @@ from dotenv import load_dotenv
 import os
 
 from create_bot import bot
-from utils import get_Car_Spicifications
+from utils import get_Car_Spicifications, Output_Car_Specifications
 
-from keyboards.Keys import main_keyboard, cars_keyboard, filial_keyboard, get_car_brands_inline, get_car_models_inline, get_car_options_inline
+from keyboards.Keys import (main_keyboard, cars_keyboard, filial_keyboard, request_keyboard, get_light_car_brands_inline, get_light_car_models_inline,
+                            get_truck_brands_inline, get_truck_models_inline, get_car_options_inline)
 
 load_dotenv()
 start_router = Router()
 
-
+brand = ""
 model = ""
-ac = "not identified"
-cruise_c = "not identified"
-luk = "not identified"
-ekran = "not identified"
-podogrev_sid = "not identified"
-kamera_360_gradus = "not identified"
-auto_parkovka = "not identified"
 comforts_list = []
 
 # Define states for user input
@@ -47,13 +41,7 @@ TG_USERNAME = os.getenv("TG_USERNAME")
 # group chat id
 GROUP_CHAT_ID = os.getenv("GROUP_CHAT_ID")
 
-
-# Car brands and their models
-# car_brands = {
-#     "Toyota": ["Camry", "Corolla", "Land Cruiser"],
-#     "BMW": ["X5", "M3", "i8"],
-#     "Mercedes": ["E-Class", "C-Class", "GLS"]
-# }
+BOT_CHAT_ID = os.getenv("BOT_CHAT_ID")
 
 # Handler for "Cars" button
 @start_router.message(lambda message: message.text == "🚗Avtomobillar")
@@ -64,12 +52,34 @@ async def cars_handler(message: types.Message):
 @start_router.message(lambda message: message.text == "🚗Yengil avtomobillar")
 async def yengil_avto_handler(message: types.Message):
     text = "🚗Avtomobil brandini tanlang:"
-    await message.answer(text, reply_markup=get_car_brands_inline())
+    await message.answer(text, reply_markup=get_light_car_brands_inline())
 
+# =========================== Truck Cars =================================================
 @start_router.message(lambda message: message.text == "🚚Yuk avtomobillar")
 async def yuk_avto_handler(message: types.Message):
     text = "🚚Yuk avtomobillar:"
-    await message.answer(text, reply_markup=get_car_brands_inline())
+    await message.answer(text, reply_markup=get_truck_brands_inline())
+
+@start_router.callback_query(F.data.startswith("Brand_"))
+async def car_brand_handler(call: CallbackQuery):
+    brand = call.data.split("_")[1]  # Extract brand name
+    await call.message.answer(f"🚘 {brand} models:", reply_markup=get_truck_models_inline(brand))
+
+# Handling inline button presses for car models
+@start_router.callback_query(F.data.startswith("Model_"))
+async def car_model_handler(call: CallbackQuery, state: FSMContext):
+    global model
+    model = call.data.split("_")[1]  # Extract model name
+    await state.update_data(car_model=model)
+    await call.message.answer(f"🚘 {model} xarakteristikasi...\n\nIltmos tanlang:",
+                              reply_markup=get_car_options_inline())
+
+
+# Handler for "Back" button inside car models (returns to brands)
+@start_router.callback_query(F.data == "Back_to_brands")
+async def back_to_brands(call: CallbackQuery):
+    await call.message.answer("🚗 Avtomobil brendini tanlang:", reply_markup=get_truck_brands_inline())
+# ========================================================================================
 
 # Handler to go back to the main menu
 @start_router.message(lambda message: message.text == "🔙 Orqaga")
@@ -81,8 +91,9 @@ async def back_to_main_menu(message: types.Message):
 # Handling inline button presses for car brands (show models)
 @start_router.callback_query(F.data.startswith("brand_"))
 async def car_brand_handler(call: CallbackQuery):
+    global brand
     brand = call.data.split("_")[1]  # Extract brand name
-    await call.message.answer(f"🚘 {brand} models:", reply_markup=get_car_models_inline(brand))
+    await call.message.answer(f"🚘 {brand} models:", reply_markup=get_light_car_models_inline(brand))
 
 # Handling inline button presses for car models
 @start_router.callback_query(F.data.startswith("model_"))
@@ -90,32 +101,32 @@ async def car_model_handler(call: CallbackQuery, state: FSMContext):
     global model
     model = call.data.split("_")[1]  # Extract model name
     await state.update_data(car_model=model)
-    await call.message.answer(f"🚘 {model} xarakteristikasi...\n\nIltmos tanlang:", reply_markup=get_car_options_inline())
+    await call.message.answer(f"🚘{brand} {model}\n\nIltmos tanlang:", reply_markup=get_car_options_inline())
 
 # Handler for "Back" button inside car models (returns to brands)
 @start_router.callback_query(F.data == "back_to_brands")
 async def back_to_brands(call: CallbackQuery):
-    await call.message.answer("🚗 Please choose a brand:", reply_markup=get_car_brands_inline())
+    await call.message.answer("🚗 Avtomobil brendini tanlang:", reply_markup=get_light_car_brands_inline())
 
 
 # Handler for "Back" button inside inline car list
 @start_router.callback_query(F.data == "back_to_cars")
 async def back_to_cars(call: CallbackQuery):
-    await call.message.answer("🚗 Please choose a category:", reply_markup=cars_keyboard)
+    await call.message.answer("🚗 Avtomobil turini tanlang:", reply_markup=cars_keyboard)
 
 # Handler for "Leave the request" button (asks for user's name)
 @start_router.callback_query(F.data == "leave_request")
 async def leave_request_handler(call: CallbackQuery, state: FSMContext):
-    await call.message.answer("📝 Please enter your full name:")
+    await call.message.answer("📝 Ismingini kiriting:")
     await state.set_state(RequestState.waiting_for_name)
 
 # Handler for user sending their name
 @start_router.message(RequestState.waiting_for_name)
 async def get_user_name(message: types.Message, state: FSMContext):
     await state.update_data(name=message.text)
-    await message.answer("📞 Now, please share your phone number.",
+    await message.answer("📞 Telefon no'meringizni kiriting.",
                          reply_markup=ReplyKeyboardMarkup(
-                             keyboard=[[KeyboardButton(text="📲 Share My Number", request_contact=True)]],
+                             keyboard=[[KeyboardButton(text="📲 Telefon no'mer", request_contact=True)]],
                              resize_keyboard=True, one_time_keyboard=True
                          ))
     await state.set_state(RequestState.waiting_for_phone)
@@ -139,7 +150,7 @@ async def get_user_phone(message: types.Message, state: FSMContext):
     await message.bot.send_message(GROUP_CHAT_ID, group_message)
 
     # Confirming to the user
-    await message.answer("✅ Your request has been recorded and sent to our team!", reply_markup=main_keyboard)
+    await message.answer("✅ Sizning so'rovingiz qabul qilindi!", reply_markup=main_keyboard)
 
     await state.clear()
 
@@ -151,136 +162,19 @@ async def contact_manager_handler(call: CallbackQuery):
 # Car specifications
 @start_router.callback_query(F.data == "car specifications")
 async def car_specifications(call: CallbackQuery, state: FSMContext):
-    specifications = get_Car_Spicifications.get_car_by_model_filtered(model)
-    specifications["probeg"] = "0"
-    if specifications["engine_type"] == "Benzin":
-        if specifications["is_ac_available"]:
-            global ac
-            ac = "✅Konditsioner"
-            comforts_list.append(ac)
-        else:
-            ac = ""
-        if specifications["is_cruise_control_available"]:
-            global cruise_c
-            cruise_c = "✅Kruiz kontrol"
-            comforts_list.append(cruise_c)
-        else:
-            cruise_c = ""
-        if specifications["is_luk_available"]:
-            global luk
-            luk = "✅Panarama Elektrik luk"
-            comforts_list.append(luk)
-        else:
-            luk = ""
-        if specifications["is_display_available"]:
-            global ekran
-            ekran = "✅Sensor Ekran"
-            comforts_list.append(ekran)
-        else:
-            ekran = ""
-        if specifications["is_seat_heat_available"]:
-            global podogrev_sid
-            podogrev_sid = "✅O'rindiqlar isishi"
-            comforts_list.append(podogrev_sid)
-        else:
-            podogrev_sid = ""
-        if specifications["is_360_kamera_available"]:
-            global kamera_360_gradus
-            kamera_360_gradus = "✅360 Kamera"
-            comforts_list.append(kamera_360_gradus)
-        else:
-            kamera_360_gradus = ""
-        if specifications["is_auto_parking_available"]:
-            global auto_parkovka
-            auto_parkovka = "✅Avto parkovka"
-            comforts_list.append(auto_parkovka)
-        else:
-            auto_parkovka = ""
-        print(comforts_list)
-        await call.message.answer(f"<pre>"
-                                  f"🔰🔰Brand:            <b>{specifications["brand"]}</b>\n"
-                                  f"🚘🚘Model:            <b>{specifications["model"]}</b>\n"
-                                  f"📆📆Yil:              <b>{specifications["year"]}</b>\n"
-                                  f"💰💵Narxi:            <b>{specifications["price"]}</b>\n"
-                                  f"✅✅Holati:           <b>{specifications["condition"]}</b>\n"
-                                  f"🚗🚙Kuzov turi:       <b>{specifications["body_type"]}</b>\n"
-                                  f"⛽⛽Yoqilg'i turi:    <b>{specifications["engine_type"]}</b>\n"
-                                  f"⚙️📏Dvigatel hajmi:   <b>{specifications["engine_size"]} litr</b>\n"
-                                  f"🐎⚡Ot kuchi:          <b>{specifications["horsepower"]}</b>\n"
-                                  f"⚙️🔀Transmissiya:     <b>{specifications["transmission"]}</b>\n"
-                                  f"⛽📉Yoqilg'i sarfi:   <b>{specifications["fuel_spending"]} litr/100km</b>\n"
-                                  f"📏➡️Uzunligi:         <b>{specifications["length"]} mm</b>\n"
-                                  f"📏⬆️Balandligi:       <b>{specifications["height"]} mm</b>\n"
-                                  f"📏↔️Eni:              <b>{specifications["width"]} mm</b>\n"
-                                  f"⚫📏Diska diametri:   <b>{specifications["disk_diameter"]} dyum</b>\n"
-                                  f"📦🚗Bagaj sig'imi:    <b>{specifications["cargo_capacity"]} litr</b>\n"
-                                  f"🪑🚘O'rindiqlar soni: <b>{specifications["seat_capacity"]}</b>\n"
-                                  f"📍🚗Probeg:           <b>{specifications["probeg"]}</b>\n"
-                                  f"🛡️📜Garantiya:        <b>{specifications["guarantee"]}</b>\n"
-                                  f"🎨🚗Rangi:            <b>{specifications["color"]}</b>\n"
-                                  f"</pre>",
-                                    parse_mode="HTML")
-        await call.message.answer("\n".join(comforts_list))
+    photos = get_Car_Spicifications.get_car_photo_by_model_filtered(model)
+    # ------------------------------Rasmlarni jo'natish-----------------------------------#
+    if not photos:
+        await call.message.answer("Bu avtomobil uchun rasmlar yo'q")
+        return
+    media_group = []
 
-    elif specifications["engine_type"] == "Elektr":
-        if specifications["is_ac_available"]:
-            ac = "✅Konditsioner"
-            comforts_list.append(ac)
-        else:
-            ac = ""
-        if specifications["is_cruise_control_available"]:
-            cruise_c = "✅Kruiz kontrol"
-            comforts_list.append(cruise_c)
-        else:
-            cruise_c = ""
-        if specifications["is_luk_available"]:
-            luk = "✅Panarama Elektrik luk"
-            comforts_list.append(luk)
-        else:
-            luk = ""
-        if specifications["is_display_available"]:
-            ekran = "✅Sensor Ekran"
-            comforts_list.append(ekran)
-        else:
-            ekran = ""
-        if specifications["is_seat_heat_available"]:
-            podogrev_sid = "✅O'rindiqlar isishi"
-            comforts_list.append(podogrev_sid)
-        else:
-            podogrev_sid = ""
-        if specifications["is_360_kamera_available"]:
-            kamera_360_gradus = "✅360 Kamera"
-            comforts_list.append(kamera_360_gradus)
-        else:
-            kamera_360_gradus = ""
-        if specifications["is_auto_parking_available"]:
-            auto_parkovka = "✅Avto parkovka"
-            comforts_list.append(auto_parkovka)
-        else:
-            auto_parkovka = None
-        await call.message.answer(f"<pre>"
-                                  f"🔰🔰Brand:                      <b>{specifications["brand"]}</b>\n"
-                                  f"🚘🚘Model:                      <b>{specifications["model"]}</b>\n"
-                                  f"📆📆Yil:                        <b>{specifications["year"]}</b>\n"
-                                  f"💰💵Narxi:                      <b>{specifications["price"]} $</b>\n"
-                                  f"✅✅Holati:                     <b>{specifications["condition"]}</b>\n"
-                                  f"🔋⚡Batareya sig'imi:           <b>{specifications["battery_capacity"]} kWatt/soat</b>\n"
-                                  f"⚡🚀Tez zaryad olish vaqti:     <b>{specifications["bistr_zaryad"]}</b>\n"
-                                  f"🏠🔌Uyda zaryad olish vaqti:    <b>{specifications["home_zaryad"]}</b>\n"
-                                  f"🚗🚙Kuzov turi:                 <b>{specifications["body_type"]}</b>\n"
-                                  f"⚡⚡Yoqilg'i turi:              <b>{specifications["engine_type"]}</b>\n"
-                                  f"🐎⚡Ot kuchi:                   <b>{specifications["horsepower"]}</b>\n"
-                                  f"⚙️🔀Transmissiya:               <b>{specifications["transmission"]}</b>\n"
-                                  f"📏➡️Uzunligi:                   <b>{specifications["length"]} mm</b>\n"
-                                  f"📏⬆️Balandligi:                 <b>{specifications["height"]} mm</b>\n"
-                                  f"📏↔️Eni:                        <b>{specifications["width"]} mm</b>\n"
-                                  f"⚫📏Diska diametri:             <b>{specifications["disk_diameter"]} dyum</b>\n"
-                                  f"📦🚗Bagaj sig'imi:              <b>{specifications["cargo_capacity"]} litr</b>\n"
-                                  f"🪑🚘O'rindiqlar soni:           <b>{specifications["seat_capacity"]}</b>\n"
-                                  f"🔋🧪Batareya turi:              <b>{specifications["battery_type"]}</b>\n"
-                                  f"📍🚗💨Probeg:                   <b>{specifications["probeg"]}</b>\n"
-                                  f"🛡️📜Garantiya:                  <b>{specifications["guarantee"]}</b>\n"
-                                  f"🎨🚗Rangi:                      <b>{specifications["color"]}</b>\n"
-                                  f"</pre>", parse_mode="HTML")
-        await call.message.answer("\n".join(comforts_list))
-
+    for photo in photos:
+        file = FSInputFile(photo.photo_url)
+        media_group.append(types.InputMediaPhoto(media=file))
+    if len(media_group) == 1:
+        await bot.send_photo(BOT_CHAT_ID, media_group[0].media)
+    else:
+        await bot.send_media_group(BOT_CHAT_ID, media_group)
+    # ----------------------------------------------------------------------------------------
+    await call.message.answer(f"<pre>{Output_Car_Specifications.getCarSpecifications(model)}</pre>", parse_mode="HTML", reply_markup=get_car_options_inline())

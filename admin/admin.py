@@ -11,7 +11,7 @@ import shutil
 # Create the main window
 app = customtkinter.CTk()
 app.geometry("1500x900")
-app.title("Add car")
+app.title("Avtomobil qo'shish")
 
 custom_font = customtkinter.CTkFont(family="Arial", size=14, weight="bold")
 data = {}
@@ -23,8 +23,7 @@ brand_lbl = customtkinter.CTkLabel(app, text="Brand", font=custom_font)
 brand_lbl.place(x=100, y=80)
 
 # brand text box
-brand = customtkinter.CTkTextbox(app, width=200, height=30)
-# brand.insert("0.0", "Brand of the car")
+brand = customtkinter.CTkTextbox(app, width=200, height=30, text_color="orange")
 brand.place(x=90, y=110)
 #---------------------------------------------------------------
 
@@ -34,108 +33,108 @@ model_lbl = customtkinter.CTkLabel(app, text="Model", font=custom_font)
 model_lbl.place(x=400, y=80)
 
 # model txt box
-model = customtkinter.CTkTextbox(app, width=200, height=30)
+model = customtkinter.CTkTextbox(app, width=200, height=30, text_color="orange")
 model.place(x=390, y=110)
 #----------------------------------------------------------------
 
 #---------------------car year-------------------------------
 # year label
-year_lbl = customtkinter.CTkLabel(app, text="Year", font=custom_font)
+year_lbl = customtkinter.CTkLabel(app, text="Yil", font=custom_font)
 year_lbl.place(x=700, y=80)
 
 # year txt box
-year = customtkinter.CTkTextbox(app, width=200, height=30)
+year = customtkinter.CTkTextbox(app, width=200, height=3, text_color="orange")
 year.place(x=690, y=110)
 #----------------------------------------------------------------
 
 #---------------------car position-------------------------------
 # position label
-position_lbl = customtkinter.CTkLabel(app, text="Position", font=custom_font)
+position_lbl = customtkinter.CTkLabel(app, text="Pozitsiya", font=custom_font)
 position_lbl.place(x=1000, y=80)
 
 # position txt box
-position = customtkinter.CTkComboBox(app, values=['1chi pozitsiya', '2chi pozitsiya', '3chi pozitsiya', '4chi pozitsiya'], width=200, height=30)
+position = customtkinter.CTkComboBox(app, values=['1chi pozitsiya', '2chi pozitsiya', '3chi pozitsiya', '4chi pozitsiya'], width=200, height=30, text_color="orange")
 position.place(x=990, y=110)
 #----------------------------------------------------------------
 
 #---------------------car Price-------------------------------
 # Price label
-price_lbl = customtkinter.CTkLabel(app, text="Price", font=custom_font)
+price_lbl = customtkinter.CTkLabel(app, text="Narxi", font=custom_font)
 price_lbl.place(x=100, y=200)
 
 # Price txt box
-price = customtkinter.CTkTextbox(app, width=200, height=30)
+price = customtkinter.CTkTextbox(app, width=200, height=30, text_color="orange")
 
 price.place(x=90, y=230)
 #----------------------------------------------------------------
 
 #---------------------car Condition-------------------------------
 # Condition label
-condition_lbl = customtkinter.CTkLabel(app, text="Condition", font=custom_font)
+condition_lbl = customtkinter.CTkLabel(app, text="Holati", font=custom_font)
 condition_lbl.place(x=400, y=200)
 
 # Condition txt box
-condition = customtkinter.CTkComboBox(app, values=['Yangi', 'Ishlatilgan'], width=200, height=30)
+condition = customtkinter.CTkComboBox(app, values=['Yangi', 'Ishlatilgan'], width=200, height=30, text_color="orange")
 condition.place(x=390, y=230)
 #----------------------------------------------------------------
 
 #---------------------car Body type-------------------------------
 # Body type label
-body_type_lbl = customtkinter.CTkLabel(app, text="Body type", font=custom_font)
+body_type_lbl = customtkinter.CTkLabel(app, text="Kuzov turi", font=custom_font)
 body_type_lbl.place(x=700, y=200)
 
 # Body type txt box
-body_type = customtkinter.CTkComboBox(app, values=['Sedan', 'Crossover', 'Pickup', 'Liftback'], width=200, height=30)
+body_type = customtkinter.CTkComboBox(app, values=['Sedan', 'Crossover', 'Pickup', 'Liftback'], width=200, height=30, text_color="orange")
 body_type.place(x=690, y=230)
 #----------------------------------------------------------------
 
 #---------------------car Engine type-------------------------------
 # Engine type label
-engine_type_lbl = customtkinter.CTkLabel(app, text="Engine type", font=custom_font)
+engine_type_lbl = customtkinter.CTkLabel(app, text="Motor turi", font=custom_font)
 engine_type_lbl.place(x=1000, y=200)
 
 # Engine type box
-engine_type = customtkinter.CTkComboBox(app, values=['Benzin', 'Dizel', 'Elektr', 'Gibrid'], width=200, height=30)
+engine_type = customtkinter.CTkComboBox(app, values=['Benzin', 'Dizel', 'Elektr', 'Gibrid'], width=200, height=30, text_color="orange")
 engine_type.place(x=990, y=230)
 #----------------------------------------------------------------
 
 #---------------------car Engine size-------------------------------
 # Engine size label
-engine_size_lbl = customtkinter.CTkLabel(app, text="Engine size", font=custom_font)
+engine_size_lbl = customtkinter.CTkLabel(app, text="Motor hajmi", font=custom_font)
 engine_size_lbl.place(x=100, y=320)
 
 # Engine_size txt box
-engine_size = customtkinter.CTkTextbox(app, width=200, height=30)
+engine_size = customtkinter.CTkTextbox(app, width=200, height=30, text_color="orange")
 engine_size.place(x=90, y=350)
 #----------------------------------------------------------------
 
 #---------------------car HorsePower-------------------------------
 # HorsePower label
-horsePower_lbl = customtkinter.CTkLabel(app, text="HorsePower", font=custom_font)
+horsePower_lbl = customtkinter.CTkLabel(app, text="Ot kuchi", font=custom_font)
 horsePower_lbl.place(x=400, y=320)
 
 # HorsePower txt box
-horsePower = customtkinter.CTkTextbox(app, width=200, height=30)
+horsePower = customtkinter.CTkTextbox(app, width=200, height=30, text_color="orange")
 horsePower.place(x=390, y=350)
 #----------------------------------------------------------------
 
-#---------------------car Torque-------------------------------
-# Torque label
-torque_lbl = customtkinter.CTkLabel(app, text="Torque", font=custom_font)
-torque_lbl.place(x=700, y=320)
+#---------------------car Type-------------------------------
+# Car type label
+car_type_lbl = customtkinter.CTkLabel(app, text="Moshina turi", font=custom_font)
+car_type_lbl.place(x=700, y=320)
 
-# Torque txt box
-torque = customtkinter.CTkTextbox(app, width=200, height=30)
-torque.place(x=690, y=350)
+# Car_type txt box
+Car_type = customtkinter.CTkComboBox(app, values=['Yengil', 'Yuk'], width=200, height=30, text_color="orange")
+Car_type.place(x=690, y=350)
 #----------------------------------------------------------------
 
 #---------------------car Transmission-------------------------------
 # Transmission label
-transmission_lbl = customtkinter.CTkLabel(app, text="Transmission", font=custom_font)
+transmission_lbl = customtkinter.CTkLabel(app, text="Transmissiya", font=custom_font)
 transmission_lbl.place(x=1000, y=320)
 
 # Transmission txt box
-transmission = customtkinter.CTkComboBox(app, values=['Avtomat', 'Mexanik', 'Robot', 'Variator'], width=200, height=30)
+transmission = customtkinter.CTkComboBox(app, values=['Avtomat', 'Mexanika', 'Robot', 'Variator'], width=200, height=30, text_color="orange")
 transmission.place(x=990, y=350)
 #----------------------------------------------------------------
 
@@ -145,7 +144,7 @@ privod_lbl = customtkinter.CTkLabel(app, text="Privod", font=custom_font)
 privod_lbl.place(x=100, y=440)
 
 # Privod txt box
-privod = customtkinter.CTkComboBox(app, values=['Oldi', 'Orqa', '4 tomon'], width=200, height=30)
+privod = customtkinter.CTkComboBox(app, values=['Oldi', 'Orqa', '4 tomon'], width=200, height=30, text_color="orange")
 privod.place(x=90, y=470)
 #----------------------------------------------------------------
 
@@ -155,7 +154,7 @@ rasxod_lbl = customtkinter.CTkLabel(app, text="Rasxod", font=custom_font)
 rasxod_lbl.place(x=400, y=440)
 
 # Rasxod txt box
-rasxod = customtkinter.CTkTextbox(app, width=200, height=30)
+rasxod = customtkinter.CTkTextbox(app, width=200, height=30, text_color="orange")
 rasxod.place(x=390, y=470)
 #----------------------------------------------------------------
 
@@ -165,7 +164,7 @@ uzunligi_lbl = customtkinter.CTkLabel(app, text="Uzunligi", font=custom_font)
 uzunligi_lbl.place(x=700, y=440)
 
 # Uzunligi txt box
-uzunligi = customtkinter.CTkTextbox(app, width=200, height=30)
+uzunligi = customtkinter.CTkTextbox(app, width=200, height=30, text_color="orange")
 uzunligi.place(x=690, y=470)
 #----------------------------------------------------------------
 
@@ -175,7 +174,7 @@ balandligi_lbl = customtkinter.CTkLabel(app, text="Balandligi", font=custom_font
 balandligi_lbl.place(x=1000, y=440)
 
 # Balandligi txt box
-balandligi = customtkinter.CTkTextbox(app, width=200, height=30)
+balandligi = customtkinter.CTkTextbox(app, width=200, height=30, text_color="orange")
 balandligi.place(x=990, y=470)
 #----------------------------------------------------------------
 
@@ -185,7 +184,7 @@ eni_lbl = customtkinter.CTkLabel(app, text="Eni", font=custom_font)
 eni_lbl.place(x=100, y=560)
 
 # Eni txt box
-eni = customtkinter.CTkTextbox(app, width=200, height=30)
+eni = customtkinter.CTkTextbox(app, width=200, height=30, text_color="orange")
 eni.place(x=90, y=590)
 #----------------------------------------------------------------
 
@@ -195,57 +194,57 @@ disk_diametr_lbl = customtkinter.CTkLabel(app, text="Diska diametri", font=custo
 disk_diametr_lbl.place(x=400, y=560)
 
 # Diska diametri txt box
-disk_diametr = customtkinter.CTkTextbox(app, width=200, height=30)
+disk_diametr = customtkinter.CTkTextbox(app, width=200, height=30, text_color="orange")
 disk_diametr.place(x=390, y=590)
 #----------------------------------------------------------------
 
 #---------------------car Clearance-------------------------------
 # Clearance label
-clearance_lbl = customtkinter.CTkLabel(app, text="Clearance", font=custom_font)
+clearance_lbl = customtkinter.CTkLabel(app, text="Yerdan balandligi", font=custom_font)
 clearance_lbl.place(x=700, y=560)
 
 # Clearance txt box
-clearance = customtkinter.CTkTextbox(app, width=200, height=30)
+clearance = customtkinter.CTkTextbox(app, width=200, height=30, text_color="orange")
 clearance.place(x=690, y=590)
 #----------------------------------------------------------------
 
 #---------------------car Cargo Capacity-------------------------------
 # Cargo Capacity label
-cargo_capacity_lbl = customtkinter.CTkLabel(app, text="Cargo Capacity", font=custom_font)
+cargo_capacity_lbl = customtkinter.CTkLabel(app, text="Bagaj sig'imi", font=custom_font)
 cargo_capacity_lbl.place(x=1000, y=560)
 
 # Cargo Capacity txt box
-cargo_capacity = customtkinter.CTkTextbox(app, width=200, height=30)
+cargo_capacity = customtkinter.CTkTextbox(app, width=200, height=30, text_color="orange")
 cargo_capacity.place(x=990, y=590)
 #----------------------------------------------------------------
 
 #---------------------car Seat Capacity-------------------------------
 # Seat Capacity label
-seat_capacity_lbl = customtkinter.CTkLabel(app, text="Seat Capacity", font=custom_font)
+seat_capacity_lbl = customtkinter.CTkLabel(app, text="O'rindiqlar soni", font=custom_font)
 seat_capacity_lbl.place(x=100, y=680)
 
 # Seat Capacity txt box
-seat_capacity = customtkinter.CTkTextbox(app, width=200, height=30)
+seat_capacity = customtkinter.CTkTextbox(app, width=200, height=30, text_color="orange")
 seat_capacity.place(x=90, y=710)
 #----------------------------------------------------------------
 
 #---------------------car Lifting Capacity-------------------------------
 # Lifting Capacity label
-lift_capacity_lbl = customtkinter.CTkLabel(app, text="Lifting Capacity", font=custom_font)
+lift_capacity_lbl = customtkinter.CTkLabel(app, text="Yuk ko'tarishi", font=custom_font)
 lift_capacity_lbl.place(x=400, y=680)
 
 # Lifting Capacity txt box
-lift_capacity = customtkinter.CTkTextbox(app, width=200, height=30)
+lift_capacity = customtkinter.CTkTextbox(app, width=200, height=30, text_color="orange")
 lift_capacity.place(x=390, y=710)
 #----------------------------------------------------------------
 
 #---------------------car Battery type-------------------------------
 # Battery type label
-battery_type_lbl = customtkinter.CTkLabel(app, text="Battery type", font=custom_font)
+battery_type_lbl = customtkinter.CTkLabel(app, text="Batareya turi", font=custom_font)
 battery_type_lbl.place(x=700, y=680)
 
 # Battery type txt box
-battery_type = customtkinter.CTkTextbox(app, width=200, height=30)
+battery_type = customtkinter.CTkTextbox(app, width=200, height=30, text_color="orange")
 battery_type.place(x=690, y=710)
 #----------------------------------------------------------------
 
@@ -255,7 +254,7 @@ probeg_lbl = customtkinter.CTkLabel(app, text="Probeg", font=custom_font)
 probeg_lbl.place(x=1000, y=680)
 
 # Probeg txt box
-probeg = customtkinter.CTkTextbox(app, width=200, height=30)
+probeg = customtkinter.CTkTextbox(app, width=200, height=30, text_color="orange")
 probeg.place(x=990, y=710)
 #----------------------------------------------------------------
 
@@ -265,47 +264,47 @@ garantiya_lbl = customtkinter.CTkLabel(app, text="Garantiya", font=custom_font)
 garantiya_lbl.place(x=100, y=800)
 
 # Garantiya txt box
-garantiya = customtkinter.CTkTextbox(app, width=200, height=30)
+garantiya = customtkinter.CTkTextbox(app, width=200, height=30, text_color="orange")
 garantiya.place(x=90, y=830)
 #----------------------------------------------------------------
 
 #---------------------car Color-------------------------------
 # Color label
-color_lbl = customtkinter.CTkLabel(app, text="Color", font=custom_font)
+color_lbl = customtkinter.CTkLabel(app, text="Rangi", font=custom_font)
 color_lbl.place(x=400, y=800)
 
 # Color txt box
-color = customtkinter.CTkTextbox(app, width=200, height=30)
+color = customtkinter.CTkTextbox(app, width=200, height=30, text_color="orange")
 color.place(x=390, y=830)
 #----------------------------------------------------------------
 
 #---------------------car Bistri Zaryad-------------------------------
 # Bistri Zaryad label
-bistr_zaryad_lbl = customtkinter.CTkLabel(app, text="Bistri Zaryad", font=custom_font)
+bistr_zaryad_lbl = customtkinter.CTkLabel(app, text="Tez zaryadlash vaqti", font=custom_font)
 bistr_zaryad_lbl.place(x=700, y=800)
 
 # Bistri Zaryad txt box
-bistr_zaryad = customtkinter.CTkTextbox(app, width=200, height=30)
+bistr_zaryad = customtkinter.CTkTextbox(app, width=200, height=30, text_color="orange")
 bistr_zaryad.place(x=690, y=830)
 #----------------------------------------------------------------
 
 #---------------------car Home Zaryad-------------------------------
 # Home Zaryad label
-home_zaryad_lbl = customtkinter.CTkLabel(app, text="Home Zaryad", font=custom_font)
+home_zaryad_lbl = customtkinter.CTkLabel(app, text="Uyda zaryadlash vaqti", font=custom_font)
 home_zaryad_lbl.place(x=1000, y=800)
 
 # Home Zaryad txt box
-home_zaryad = customtkinter.CTkTextbox(app, width=200, height=30)
+home_zaryad = customtkinter.CTkTextbox(app, width=200, height=30, text_color="orange")
 home_zaryad.place(x=990, y=830)
 #----------------------------------------------------------------
 
 #---------------------car Battery Capacity-------------------------------
 # Battery Capacity label
-battery_capacity_lbl = customtkinter.CTkLabel(app, text="Battery Capacity", font=custom_font)
+battery_capacity_lbl = customtkinter.CTkLabel(app, text="Batareya sig'imi", font=custom_font)
 battery_capacity_lbl.place(x=1260, y=80)
 
 # Battery Capacity txt box
-battery_capacity = customtkinter.CTkTextbox(app, width=200, height=30)
+battery_capacity = customtkinter.CTkTextbox(app, width=200, height=30, text_color="orange")
 battery_capacity.place(x=1250, y=110)
 #----------------------------------------------------------------
 
@@ -322,7 +321,7 @@ luk.place(x=1310, y=290)
 sensor_ekran = customtkinter.CTkCheckBox(app, text='Sensor ekran', width=200, height=30)
 sensor_ekran.place(x=1310, y=340)
 
-podogrev_sideniy = customtkinter.CTkCheckBox(app, text='Podogrev_sideniy', width=200, height=30)
+podogrev_sideniy = customtkinter.CTkCheckBox(app, text='Orindiqlar qizishi', width=200, height=30)
 podogrev_sideniy.place(x=1310, y=390)
 
 kamera_360 = customtkinter.CTkCheckBox(app, text='360 Kamera', width=200, height=30)
@@ -444,7 +443,7 @@ def CreateCar():
     data['engine_type_data'] = engine_type.get().strip()
     data['engine_size_data'] = engine_size.get("1.0", 'end').strip()
     data['horsePower_data'] = horsePower.get("1.0", 'end').strip()
-    data['torque_data'] = torque.get("1.0", 'end').strip()
+    data['car_type_data'] = Car_type.get().strip()
     data['transmission_data'] = transmission.get().strip()
     data['privod_data'] = privod.get().strip()
     data['rasxod_data'] = rasxod.get("1.0", 'end').strip()
@@ -488,8 +487,8 @@ def CreateCar():
         data['engine_size_data'] = 0
     if data['horsePower_data'] == "":
         data['horsePower_data'] = 0
-    if data['torque_data'] == "":
-        data['torque_data'] = 0
+    if data['car_type_data'] == "":
+        data['car_type_data'] = 0
     if data['transmission_data'] == "":
         data['transmission_data'] = 0
     if data['privod_data'] == "":
@@ -545,7 +544,7 @@ def CreateCar():
 
     db = SessionLocal()
     new_car = Car(brand=data['brand_data'], model=data['model_data'], year=data['year_data'], position=data['position_data'],battery_capacity=data["battery_capacity"], price=data['price_data'], condition=data['condition_data'],
-                  body_type=data['body_type_data'], engine_type=data['engine_type_data'], engine_size=data['engine_size_data'], horsepower=data['horsePower_data'], torque=data['torque_data'],
+                  body_type=data['body_type_data'], engine_type=data['engine_type_data'], engine_size=data['engine_size_data'], horsepower=data['horsePower_data'], car_type=data['car_type_data'],
                   transmission=data['transmission_data'], privod=data['privod_data'], fuel_spending=data['rasxod_data'], length=data['uzunligi_data'], height=data['balandligi_data'],
                   width=data['eni_data'], disk_diameter=data['disk_diametr_data'], clearance=data['clearance_data'], cargo_capacity=data['cargo_capacity_data'], seat_capacity=data['seat_capacity_data'],
                   lift_capacity=data['lift_capacity_data'], battery_type=data['battery_type'], mileage=data['probeg_data'], guarantee=data['garantiya_data'], color=data['color_data'], bistr_zaryad=data["bistr_zaryad"], home_zaryad=data["home_zaryad"], is_ac_available=data['kond_data'], is_cruise_control_available=data['cruise_control_data'],
@@ -606,14 +605,14 @@ def getData():
     horsePower.delete("1.0", "end")
     horsePower.insert("end", car.horsepower)
 
-    torque.delete("1.0", "end")
-    torque.insert("end", car.torque)
+    Car_type.set("")
+    Car_type.set(car.car_type)
 
     transmission.set("")
     transmission.set(car.transmission)
 
     privod.set("")
-    privod.set(car.torque)
+    privod.set(car.privod)
 
     rasxod.delete("1.0", "end")
     rasxod.insert("end", car.fuel_spending)
@@ -684,7 +683,7 @@ def EditCarData():
     data['engine_type_data'] = engine_type.get().strip()
     data['engine_size_data'] = engine_size.get("1.0", 'end').strip()
     data['horsePower_data'] = horsePower.get("1.0", 'end').strip()
-    data['torque_data'] = torque.get("1.0", 'end').strip()
+    data['car_type_data'] = Car_type.get().strip()
     data['transmission_data'] = transmission.get().strip()
     data['privod_data'] = privod.get().strip()
     data['rasxod_data'] = rasxod.get("1.0", 'end').strip()
@@ -728,8 +727,8 @@ def EditCarData():
         data['engine_size_data'] = 0
     if data['horsePower_data'] == "":
         data['horsePower_data'] = 0
-    if data['torque_data'] == "":
-        data['torque_data'] = 0
+    if data['car_type_data'] == "":
+        data['car_type_data'] = 0
     if data['transmission_data'] == "":
         data['transmission_data'] = 0
     if data['privod_data'] == "":
@@ -800,7 +799,7 @@ def EditCarData():
     car.engine_type=data['engine_type_data']
     car.engine_size=data['engine_size_data']
     car.horsepower=data['horsePower_data']
-    car.torque=data['torque_data']
+    car.car_type=data['car_type_data']
     car.transmission=data['transmission_data']
     car.privod=data['privod_data']
     car.fuel_spending=data['rasxod_data']
@@ -842,7 +841,7 @@ def DeleteCarData():
 
     if not car:
         print(f"Car with model {edit_model} not found.")
-        show_notification("Error", f"Car with this {edit_model} not found")
+        show_notification("Xato", f"Car with this {edit_model} not found")
         db.close()
         return
 
@@ -854,21 +853,21 @@ def DeleteCarData():
 
     edit_car_model.set("")
     edit_car_model.configure(values=getModels())
-    print(f"Car with model {edit_model} has been deleted.")
+    print(f"{edit_model} modeli o'chirildi")
 
 
 #----------------------------- Buttons--------------------------------
-add_button = customtkinter.CTkButton(app, text="Add Car", command=CreateCar)
+add_button = customtkinter.CTkButton(app, text="Avtomobil qo'shish", command=CreateCar)
 add_button.place(x=100, y=30)
 
-get_button = customtkinter.CTkButton(app, text="Get Car Data", command=getData)
+get_button = customtkinter.CTkButton(app, text="Avtomobil ma'lumotini olish", command=getData)
 get_button.place(x=400, y=30)
 
-edit_button2 = customtkinter.CTkButton(app, text="Edit Car", command=EditCarData)
-edit_button2.place(x=830, y=30)
+edit_button2 = customtkinter.CTkButton(app, text="Avtomobilni o'zgartirish", command=EditCarData)
+edit_button2.place(x=1000, y=30)
 
-delete_car = customtkinter.CTkButton(app, text="Delete Car", command=DeleteCarData)
-delete_car.place(x=1000, y=30)
+delete_car = customtkinter.CTkButton(app, text="Avtomobilni o'chirish", fg_color="red", command=DeleteCarData)
+delete_car.place(x=1200, y=30)
 #============================================================================
 
 

@@ -35,7 +35,7 @@ class Car(Base):
     engine_type = Column(String, nullable=True)
     engine_size = Column(String, nullable=True)
     horsepower = Column(String, nullable=True)
-    torque = Column(String, nullable=True)
+    car_type = Column(String, nullable=True)
     transmission = Column(String, nullable=True)
     privod = Column(String, nullable=True)
     fuel_spending = Column(String, nullable=True)
@@ -82,7 +82,7 @@ def create_car_with_photos():
         engine_type="Gasoline",
         engine_size=2.5,
         horsepower=203,
-        torque=184,
+        car_type="Yengil",
         transmission="Automatic",
         fuel_spending=7.1,
         length=4885,
