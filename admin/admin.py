@@ -16,6 +16,9 @@ app.title("Avtomobil qo'shish")
 custom_font = customtkinter.CTkFont(family="Arial", size=14, weight="bold")
 data = {}
 save_directory=""
+dir_name = ""
+stats = {}
+
 
 #--------------------- car brand -------------------------------
 # brand label
@@ -841,11 +844,32 @@ def DeleteCarData():
 
     if not car:
         print(f"Car with model {edit_model} not found.")
-        show_notification("Xato", f"Car with this {edit_model} not found")
+        show_notification("Xato", f"Car with{edit_model} model not found")
         db.close()
         return
 
-    db.query(CarPhoto).filter(CarPhoto.car_id == car.id).delete()
+    # db.query(CarPhoto).filter(CarPhoto.car_id == car.id).delete()
+
+    car_photo = db.query(CarPhoto).filter(CarPhoto.car_id == car.id).first()
+    global dir_name
+    try:
+        dir_name = os.path.dirname(car_photo.photo_url)
+    except:
+        print("There is no Photo")
+
+    print(dir_name)
+    try:
+        shutil.rmtree(dir_name)
+        print("Directory deleted succesfully")
+        show_notification("Message", "Directory deleted succesfully")
+    except PermissionError:
+        print("Permission denied! Try running as administrator.")
+        show_notification("Message", "Permission denied! Try running as administrator.")
+    except FileNotFoundError:
+        print("Directory not found.")
+        show_notification("Message", "Directory not found.")
+    except Exception as e:
+        print(f"Error {e}")
 
     db.delete(car)
     db.commit()

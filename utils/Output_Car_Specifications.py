@@ -109,10 +109,7 @@ def getCarSpecifications(model):
         comforts_list.append(auto_parkovka)
     else:
         auto_parkovka = ""
-    print(comforts_list)
 
     formatted_lines = [f"{key}{value}" for key, value in spec.items()]
     final_txt = "\n".join(formatted_lines) + "\n\n" + "\n".join(comforts_list)
     return f"\n{final_txt}\n"
-
-print(getCarSpecifications("J7"))

@@ -64,60 +64,17 @@ class Car(Base):
     # Relationship to the CarPhoto model
     photos = relationship("CarPhoto", back_populates="car", cascade="all, delete-orphan")
 
+class Statistics(Base):
+    __tablename__ = 'statistics'
+    id = Column(Integer, primary_key=True, index=True)
+    model = Column(String, nullable=False)
+    view_count = Column(Integer, default=0)
+    request_count = Column(Integer, default=0)
+    action_date = Column(String, nullable=True)
+
 # Create the database tables
 Base.metadata.create_all(bind=engine)
 
-def create_car_with_photos():
-    db = SessionLocal()
 
-    # Create a new car
-    new_car = Car(
-        brand="Toyota",
-        model="Camry",
-        year=2022,
-        position="Sedan",
-        price=30000.0,
-        condition="New",
-        body_type="Sedan",
-        engine_type="Gasoline",
-        engine_size=2.5,
-        horsepower=203,
-        car_type="Yengil",
-        transmission="Automatic",
-        fuel_spending=7.1,
-        length=4885,
-        height=1445,
-        width=1840,
-        disk_diameter=18,
-        clearance=160,
-        cargo_capacity=524,
-        seat_capacity=5,
-        lift_capacity=0,
-        battery_type=None,
-        mileage=0,
-        guarantee="3 years",
-        color="White",
-        is_ac_available=True,
-        is_cruise_control_available=True,
-        is_display_available=True,
-        is_seat_heat_available=False,
-        is_360_kamera_available=False,
-        is_auto_parking_available=False
-    )
-
-    # Add the car to the session
-    db.add(new_car)
-    db.commit()
-    db.refresh(new_car)
-
-    # Add multiple photos for the car
-    photo1 = CarPhoto(photo_url="path/to/photo1.jpg", car_id=new_car.id)
-    photo2 = CarPhoto(photo_url="path/to/photo2.jpg", car_id=new_car.id)
-    photo3 = CarPhoto(photo_url="path/to/photo3.jpg", car_id=new_car.id)
-
-    db.add_all([photo1, photo2, photo3])
-    db.commit()
-
-    db.close()
 
 # Call the function to create a new car with multiple photos

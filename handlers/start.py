@@ -1,3 +1,5 @@
+import asyncio
+
 from aiogram import Router, F, types
 from aiogram.types import (Message, ReplyKeyboardMarkup, KeyboardButton,
                                  CallbackQuery, FSInputFile)
@@ -5,10 +7,11 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 import datetime
 from dotenv import load_dotenv
+import pickle
 import os
 
 from create_bot import bot
-from utils import get_Car_Spicifications, Output_Car_Specifications
+from utils import get_Car_Spicifications, Output_Car_Specifications, get_Car_models
 
 from keyboards.Keys import (main_keyboard, cars_keyboard, filial_keyboard, request_keyboard, get_light_car_brands_inline, get_light_car_models_inline,
                             get_truck_brands_inline, get_truck_models_inline, get_car_options_inline)
@@ -16,9 +19,17 @@ from keyboards.Keys import (main_keyboard, cars_keyboard, filial_keyboard, reque
 load_dotenv()
 start_router = Router()
 
+view_stats = get_Car_models.Get_Car_models()
+req_stats = get_Car_models.Get_Car_models()
+
+user_counter = set()
 brand = ""
 model = ""
+last_model = ""
 comforts_list = []
+my_dic = {}
+
+saved_models = []
 
 # Define states for user input
 class RequestState(StatesGroup):
@@ -151,8 +162,29 @@ async def get_user_phone(message: types.Message, state: FSMContext):
 
     # Confirming to the user
     await message.answer("✅ Sizning so'rovingiz qabul qilindi!", reply_markup=main_keyboard)
+    from aiogram_run import redis_client
+
+    user_id = message.from_user.id
+    user_key = f"user:{user_id}:requests"
+
+    if not redis_client.sismember(user_key, model):
+        req_stats[f"{model}"] += 1
+
+    redis_client.sadd(user_key, model)
+    dic = pickle.dumps(req_stats)
+    redis_client.set('req_stats', dic)
+
+    car_models = redis_client.smembers(user_key)
+    for car in car_models:
+        print(car.decode())
+
+    # ss = redis_client.get('req_stats')
+    # global my_dic
+    # my_dic = pickle.loads(ss)
+    # print(my_dic)
 
     await state.clear()
+
 
 @start_router.callback_query(F.data == "contact_manager")
 async def contact_manager_handler(call: CallbackQuery):
@@ -162,6 +194,23 @@ async def contact_manager_handler(call: CallbackQuery):
 # Car specifications
 @start_router.callback_query(F.data == "car specifications")
 async def car_specifications(call: CallbackQuery, state: FSMContext):
+    from aiogram_run import redis_client
+
+    user_id = call.from_user.id
+    user_key = f"user:{user_id}:views"
+
+    if not redis_client.sismember(user_key, model):
+        view_stats[f"{model}"] += 1
+
+    redis_client.sadd(user_key, model)
+    dic = pickle.dumps(view_stats)
+    redis_client.set('view_stats', dic)
+
+    car_models = redis_client.smembers(user_key)
+    for car in car_models:
+        print(car.decode())
+
+
     photos = get_Car_Spicifications.get_car_photo_by_model_filtered(model)
     # ------------------------------Rasmlarni jo'natish-----------------------------------#
     if not photos:
@@ -169,12 +218,20 @@ async def car_specifications(call: CallbackQuery, state: FSMContext):
         return
     media_group = []
 
+    # await call.message.answer("Iltmos kuting...")
+    # await asyncio.sleep(3)
     for photo in photos:
         file = FSInputFile(photo.photo_url)
         media_group.append(types.InputMediaPhoto(media=file))
     if len(media_group) == 1:
-        await bot.send_photo(BOT_CHAT_ID, media_group[0].media)
+        await bot.send_photo(user_id, media_group[0].media)
     else:
-        await bot.send_media_group(BOT_CHAT_ID, media_group)
+        await bot.send_media_group(user_id, media_group)
     # ----------------------------------------------------------------------------------------
     await call.message.answer(f"<pre>{Output_Car_Specifications.getCarSpecifications(model)}</pre>", parse_mode="HTML", reply_markup=get_car_options_inline())
+    # ss = redis_client.get('view_stats')
+    # global my_dic
+    # my_dic = pickle.loads(ss)
+
+
+
